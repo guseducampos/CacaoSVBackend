@@ -18,7 +18,10 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     services.register(middlewares)
 
     // Configure a SQLite database
-    let postgres = PostgreSQLDatabaseConfig(hostname: "localhost", port: 5432, username: "postgres", password: "Nwpw023*")
+    let postgres = PostgreSQLDatabaseConfig(hostname: Environment.get("POSTGRES_HOST") ?? "",
+                                            port: Int(Environment.get("POSTGRES_USER") ?? "") ?? 5432,
+                                            username: Environment.get("POSTGRES_USER") ?? "",
+                                            password: Environment.get("POSTGRES_PASSWORD") ?? "")
 
     /// Register the configured PostgreSQL database to the database config.
     let database = PostgreSQLDatabase(config: postgres)
@@ -31,9 +34,5 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: Meetup.self, database: .psql)
     migrations.add(model: MeetupStatus.self, database: .psql)
     services.register(migrations)
-    
-    var commandConfig = CommandConfig.default()
-    commandConfig.use(RevertCommand.self, as: "revert")
-    services.register(commandConfig)
 
 }
