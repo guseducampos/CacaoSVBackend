@@ -5,9 +5,7 @@
 //  Created by Gustavo Campos on 7/1/18.
 //
 
-import Vapor
 import FluentPostgreSQL
-
 
 struct MeetupStatus: PostgreSQLModel {
     
@@ -18,6 +16,13 @@ struct MeetupStatus: PostgreSQLModel {
     var createdAt: Date?
     
     static let createdAtKey: TimestampKey? = \.createdAt
+}
+
+extension MeetupStatus {
+    var meetups: Children<MeetupStatus, Meetup> {
+        return children(\.statusID)
+    }
+    
 }
 
 extension MeetupStatus: Migration {}

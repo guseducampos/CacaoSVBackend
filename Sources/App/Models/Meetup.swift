@@ -19,12 +19,20 @@ struct Meetup: PostgreSQLModel {
     var name: String
     
     var eventDate: Date
+    
+    var createdAt: Date?
+    
+    static let createdAtKey: TimestampKey? = \.createdAt
 }
 
 extension Meetup {
     
     var meetupStatus: Parent<Meetup, MeetupStatus> {
         return parent(\.statusID)
+    }
+    
+    var talks: Children<Meetup, Talk> {
+        return children(\.meetupId)
     }
 }
 
