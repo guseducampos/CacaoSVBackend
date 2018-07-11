@@ -7,7 +7,7 @@
 
 import FluentPostgreSQL
 
-struct MeetupStatus: PostgreSQLModel {
+struct MeetupStatus: PostgreSQLModel, Migration {
     
     var id: Int?
     
@@ -15,16 +15,9 @@ struct MeetupStatus: PostgreSQLModel {
     
     var createdAt: Date?
     
-    static let createdAtKey: TimestampKey? = \.createdAt
-}
-
-extension MeetupStatus {
     var meetups: Children<MeetupStatus, Meetup> {
         return children(\.statusID)
     }
     
+    static let createdAtKey: TimestampKey? = \.createdAt
 }
-
-extension MeetupStatus: Migration {}
-
-

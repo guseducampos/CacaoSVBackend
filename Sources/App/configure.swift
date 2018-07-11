@@ -46,6 +46,8 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: Profile.self, database: .psql)
     migrations.add(model: Talk.self, database: .psql)
     migrations.add(model: ProfileTypePivot.self, database: .psql)
-   
+    
+    /// Seeds
+    migrations.add(migration: MeetupStatusSeed.self, database: .psql)
     services.register(migrations)
 }
