@@ -49,5 +49,14 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     
     /// Seeds
     migrations.add(migration: MeetupStatusSeed.self, database: .psql)
+    
+    if env == .development {
+        migrations.add(migration: MeetupSeed.self, database: .psql)
+        migrations.add(migration: ProfileTypeSeed.self, database: .psql)
+        migrations.add(migration: ProfileSeed.self, database: .psql)
+        migrations.add(migration: ProfileTypePivotSeed.self, database: .psql)
+        migrations.add(migration: TalkSeed.self, database: .psql)
+    }
+    
     services.register(migrations)
 }
