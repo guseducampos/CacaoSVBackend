@@ -1,8 +1,20 @@
-import FluentPostgreSQL
+//
+//  TestConfigure.swift
+//  App
+//
+//  Created by  LaptopGCampos on 7/12/18.
+//
+
+@testable import App
 import Vapor
+import FluentPostgreSQL
+
 
 /// Called before your application initializes.
-public func configure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
+public func testConfigure(_ config: inout Config,
+                          _ env: inout Environment,
+                          _ services: inout Services) throws {
+    
     /// Register providers first
     try services.register(FluentPostgreSQLProvider())
     
@@ -13,18 +25,18 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     
     /// Register middleware
     var middlewares = MiddlewareConfig()
-    middlewares.use(ErrorMiddleware.self) 
+    middlewares.use(ErrorMiddleware.self)
     services.register(middlewares)
     
     // Configure a Postgres database
     
-     let postgres = PostgreSQLDatabaseConfig(hostname: Environment.get("host") ?? "",
-        port: Int(Environment.get("POSTGRES_PORT") ?? "") ?? 5432,
-        username: Environment.get("POSTGRES_USER") ?? "",
-        database: Environment.get("POSTGRES_DATABASE") ?? "",
-        password: Environment.get("POSTGRES_PASSWORD") ?? "")
+    let postgres = PostgreSQLDatabaseConfig(hostname: Environment.get("TEST_HOST") ?? "",
+                                            port: Int(Environment.get("TEST_POSTGRES_PORT") ?? "") ?? 5433,
+                                            username: Environment.get("TEST_POSTGRES_USER") ?? "",
+                                            database: Environment.get("TEST_POSTGRES_DATABASE") ?? "",
+                                            password: Environment.get("TEST_POSTGRES_PASSWORD") ?? "")
     
-
+    
     /// Register the configured PostgreSQL database to the database config.
     let database = PostgreSQLDatabase(config: postgres)
     var databases = DatabasesConfig()
@@ -43,14 +55,11 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     /// Seeds
     
     migrations.add(migration: MeetupStatusSeed.self, database: .psql)
-    
-    if env == .development  {
-        migrations.add(migration: MeetupSeed.self, database: .psql)
-        migrations.add(migration: ProfileTypeSeed.self, database: .psql)
-        migrations.add(migration: ProfileSeed.self, database: .psql)
-        migrations.add(migration: ProfileTypePivotSeed.self, database: .psql)
-        migrations.add(migration: TalkSeed.self, database: .psql)
-    }
+    migrations.add(migration: MeetupSeed.self, database: .psql)
+    migrations.add(migration: ProfileTypeSeed.self, database: .psql)
+    migrations.add(migration: ProfileSeed.self, database: .psql)
+    migrations.add(migration: ProfileTypePivotSeed.self, database: .psql)
+    migrations.add(migration: TalkSeed.self, database: .psql)
     
     services.register(migrations)
 }

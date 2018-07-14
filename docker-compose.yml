@@ -10,9 +10,14 @@ services:
     environment:
       POSTGRES_PASSWORD: test
       POSTGRES_USER: test
-      POSTGRES_HOST: localhost
+      POSTGRES_HOST: db
       POSTGRES_PORT: 5432
       POSTGRES_DATABASE: CacaoSV
+      TEST_POSTGRES_PASSWORD: test
+      TEST_POSTGRES_USER: test
+      TEST_POSTGRES_HOST: db
+      TEST_POSTGRES_PORT: 5433
+      TEST_POSTGRES_DATABASE: CacaoSVTest
     ports:
       - 8080:8080
     volumes:
@@ -29,4 +34,13 @@ services:
       POSTGRES_PASSWORD: test
       POSTGRES_USER: test
       POSTGRES_DB: CacaoSV
+
+  dbtest:
+    image: postgres:10
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: test
+      POSTGRES_DB: CacaoSVTest
       
