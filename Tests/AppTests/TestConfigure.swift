@@ -30,12 +30,12 @@ public func testConfigure(_ config: inout Config,
     
     // Configure a Postgres database
     
-    let postgres = PostgreSQLDatabaseConfig(hostname: Environment.get("TEST_HOST") ?? "",
+  
+    let postgres = PostgreSQLDatabaseConfig(hostname: Environment.get("TEST_POSTGRES_HOST") ?? "localhost",
                                             port: Int(Environment.get("TEST_POSTGRES_PORT") ?? "") ?? 5433,
-                                            username: Environment.get("TEST_POSTGRES_USER") ?? "",
-                                            database: Environment.get("TEST_POSTGRES_DATABASE") ?? "",
-                                            password: Environment.get("TEST_POSTGRES_PASSWORD") ?? "")
-    
+                                            username: Environment.get("TEST_POSTGRES_USER") ?? "test",
+                                            database: Environment.get("TEST_POSTGRES_DATABASE") ?? "CacaoSVTest",
+                                            password: Environment.get("TEST_POSTGRES_PASSWORD") ?? "test")
     
     /// Register the configured PostgreSQL database to the database config.
     let database = PostgreSQLDatabase(config: postgres)

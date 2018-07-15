@@ -3,6 +3,7 @@ services:
   api:
     depends_on:
       - db
+      - dbtest
     build:
       context: .
       dockerfile: Dockerfile-dev
@@ -15,8 +16,8 @@ services:
       POSTGRES_DATABASE: CacaoSV
       TEST_POSTGRES_PASSWORD: test
       TEST_POSTGRES_USER: test
-      TEST_POSTGRES_HOST: db
-      TEST_POSTGRES_PORT: 5433
+      TEST_POSTGRES_HOST: dbtest
+      TEST_POSTGRES_PORT: 5432
       TEST_POSTGRES_DATABASE: CacaoSVTest
     ports:
       - 8080:8080
@@ -29,7 +30,7 @@ services:
   db:
     image: postgres:10
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       POSTGRES_PASSWORD: test
       POSTGRES_USER: test
@@ -38,7 +39,7 @@ services:
   dbtest:
     image: postgres:10
     ports:
-      - 5433:5432
+      - "5433:5432"
     environment:
       POSTGRES_PASSWORD: test
       POSTGRES_USER: test

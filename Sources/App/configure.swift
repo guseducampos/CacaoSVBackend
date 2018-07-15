@@ -18,13 +18,12 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     
     // Configure a Postgres database
     
-     let postgres = PostgreSQLDatabaseConfig(hostname: Environment.get("host") ?? "",
+     let postgres = PostgreSQLDatabaseConfig(hostname: Environment.get("POSTGRES_HOST") ?? "",
         port: Int(Environment.get("POSTGRES_PORT") ?? "") ?? 5432,
         username: Environment.get("POSTGRES_USER") ?? "",
         database: Environment.get("POSTGRES_DATABASE") ?? "",
         password: Environment.get("POSTGRES_PASSWORD") ?? "")
     
-
     /// Register the configured PostgreSQL database to the database config.
     let database = PostgreSQLDatabase(config: postgres)
     var databases = DatabasesConfig()
