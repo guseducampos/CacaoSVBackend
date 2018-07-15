@@ -44,5 +44,14 @@ extension Application {
         return try sendRequest(to: path, method: method, headers: headers, body: empty)
     }
     
-
+    func getRequest<T: Content,C: Decodable>(to path: String, method: HTTPMethod, headers: HTTPHeaders = HTTPHeaders(), data: T?, decodeTo type: C.Type ) throws -> C {
+        let response = try sendRequest(to: path, method: method, headers: headers, body: data)
+        return try response.content.decode(type).wait()
+    }
+    
+    
+    func getRequest<C: Decodable>(to path: String, method: HTTPMethod, headers: HTTPHeaders = HTTPHeaders(), decodeTo type: C.Type ) throws -> C {
+        let response = try sendRequest(to: path, method: method, headers: headers, body: EmptyContent())
+        return try response.content.decode(type).wait()
+    }
 }
