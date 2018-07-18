@@ -13,17 +13,27 @@ struct MeetupController: RouteCollection {
     func boot(router: Router) throws {
         let publicRoutes = router.grouped("api", "meetup")
         publicRoutes.get("currentSpeakers", use: currentSpeakers)
+        publicRoutes.get("currentMeetup", use: currentMeetup)
     }
     
     func currentSpeakers(_ request: Request) throws -> Future<[Profile]> {
-        return Meetup.query(on: request).filter(\.statusID == Status.scheduled.rawValue).first()
-            .flatMap { meetup -> Future<[Profile]> in
-                guard let meetup = meetup else {
-                    throw Abort(.notFound)
-                }
-                return try meetup.talks.query(on: request).all().flatMap { talks -> Future<[Profile]> in
+        return try getMeetup(byStatus: .scheduled, on: request).flatMap { meetup -> Future<[Profile]> in
+                return try meetup.talks.query(on: request).all().flatMap { talks in
                     return talks.map { $0.speaker.get(on: request) }.flatten(on: request)
                 }
+        }
+    }
+    
+    func currentMeetup(_ request: Request) throws -> Future<Meetup> {
+        return try getMeetup(byStatus: .scheduled, on: request)
+    }
+    
+    private func getMeetup(byStatus status: Status, on request: Request) throws -> Future<Meetup> {
+        return  Meetup.query(on: request).filter(\.statusID == status.rawValue).first().map { meetup in
+            guard let meetup = meetup else {
+                throw Abort(.notFound)
+            }
+            return meetup
         }
     }
 }

@@ -61,5 +61,9 @@ public func testConfigure(_ config: inout Config,
     migrations.add(migration: ProfileTypePivotSeed.self, database: .psql)
     migrations.add(migration: TalkSeed.self, database: .psql)
     
+    var commandConfig = CommandConfig.default()
+    commandConfig.useFluentCommands()
+    services.register(commandConfig)
+    
     services.register(migrations)
 }
