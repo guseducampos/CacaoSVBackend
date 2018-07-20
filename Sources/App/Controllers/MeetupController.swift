@@ -13,14 +13,21 @@ struct MeetupController: RouteCollection {
     func boot(router: Router) throws {
         let publicRoutes = router.grouped("api", "meetup")
         publicRoutes.get("currentSpeakers", use: currentSpeakers)
-        publicRoutes.get("currentMeetup", use: currentMeetup)
+        publicRoutes.get("currentMeetup",   use: currentMeetup)
+        publicRoutes.get("currentTalks",    use: currentTalks)
+    }
+    
+    func currentTalks(_ request: Request) throws -> Future<[Talk]> {
+        return try getMeetup(byStatus: .scheduled, on: request).flatMap { meetup in
+            return try meetup.talks.query(on: request).all()
+        }
     }
     
     func currentSpeakers(_ request: Request) throws -> Future<[Profile]> {
         return try getMeetup(byStatus: .scheduled, on: request).flatMap { meetup -> Future<[Profile]> in
-                return try meetup.talks.query(on: request).all().flatMap { talks in
-                    return talks.map { $0.speaker.get(on: request) }.flatten(on: request)
-                }
+            return try meetup.talks.query(on: request).all().flatMap { talks in
+                return talks.map { $0.speaker.get(on: request) }.flatten(on: request)
+            }
         }
     }
     
