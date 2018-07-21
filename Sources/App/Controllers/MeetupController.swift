@@ -19,18 +19,13 @@ struct MeetupController: RouteCollection {
     
     func currentTalks(_ request: Request) throws -> Future<[Talk]> {
         return try getMeetup(byStatus: .scheduled, on: request).flatMap { meetup in
-            return try meetup.talks.query(on: request).all()
+            return try self.getTalksFrom(meetup: meetup, on: request)
         }
     }
     
     func currentSpeakers(_ request: Request) throws -> Future<[Profile]> {
-        return try getMeetup(byStatus: .scheduled, on: request).flatMap { meetup -> Future<[Profile]> in
-            return try meetup.talks.query(on: request).all().flatMap { talks in
-                guard !talks.isEmpty else {
-                   throw Abort(.notFound)
-                }
-                return talks.map { $0.speaker.get(on: request) }.flatten(on: request)
-            }
+        return try currentTalks(request).flatMap { talks -> Future<[Profile]> in
+            return talks.map { $0.speaker.get(on: request) }.flatten(on: request)
         }
     }
     
@@ -44,6 +39,15 @@ struct MeetupController: RouteCollection {
                 throw Abort(.notFound)
             }
             return meetup
+        }
+    }
+    
+    private func getTalksFrom(meetup: Meetup, on request: Request) throws -> Future<[Talk]> {
+        return try meetup.talks.query(on: request).all().map { talks in
+            guard !talks.isEmpty else {
+                throw Abort(.notFound)
+            }
+            return talks
         }
     }
 }
