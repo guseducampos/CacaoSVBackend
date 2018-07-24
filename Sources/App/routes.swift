@@ -3,7 +3,10 @@ import Vapor
 /// Register your application's routes here.
 public func routes(_ router: Router) throws {
 
-    let meetupController = MeetupController()
+    let routeGrouped = router.grouped("api")
     
-    try router.register(collection: meetupController)
+    let meetupController = MeetupController()
+    let profileController = ProfileController()
+    
+    try routeGrouped.register(collection: meetupController, profileController)
 }

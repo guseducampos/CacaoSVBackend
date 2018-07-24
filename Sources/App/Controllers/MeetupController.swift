@@ -11,7 +11,7 @@ import Fluent
 struct MeetupController: RouteCollection {
     
     func boot(router: Router) throws {
-        let publicRoutes = router.grouped("api", "meetup")
+        let publicRoutes = router.grouped("meetup")
         publicRoutes.get("currentSpeakers", use: currentSpeakers)
         publicRoutes.get("currentMeetup",   use: currentMeetup)
         publicRoutes.get("currentTalks",    use: currentTalks)
@@ -34,20 +34,10 @@ struct MeetupController: RouteCollection {
     }
     
     private func getMeetup(byStatus status: Status, on request: Request) throws -> Future<Meetup> {
-        return  Meetup.query(on: request).filter(\.statusID == status.rawValue).first().map { meetup in
-            guard let meetup = meetup else {
-                throw Abort(.notFound)
-            }
-            return meetup
-        }
+        return  Meetup.query(on: request).filter(\.statusID == status.rawValue).first().unwrap(or: Abort(.notFound))
     }
     
     private func getTalksFrom(meetup: Meetup, on request: Request) throws -> Future<[Talk]> {
-        return try meetup.talks.query(on: request).all().map { talks in
-            guard !talks.isEmpty else {
-                throw Abort(.notFound)
-            }
-            return talks
-        }
+        return try meetup.talks.query(on: request).all().whenIsEmpty(Abort(.notFound))
     }
 }
