@@ -19,7 +19,7 @@ struct ProfileController: RouteCollection {
         return ProfileType.query(on: request).filter(\.id == ProfileTypes.community.rawValue)
             .first()
             .unwrap(or: Abort(.notFound))
-            .flatMap { profileType in return try profileType.profiles.query(on: request).all() }
+            .flatMap { try $0.profiles.query(on: request).all() }
             .whenIsEmpty(Abort(.notFound))
         
     }

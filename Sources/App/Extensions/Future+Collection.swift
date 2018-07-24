@@ -9,10 +9,10 @@ import Vapor
 
 extension Future where T: Collection {
     
-    func whenIsEmpty(_ error: Error) -> Future<T> {
+    func whenIsEmpty(_ error: @autoclosure @escaping () -> Error) -> Future<T> {
         return self.map { array in
             guard !array.isEmpty else {
-                throw error
+                throw error()
             }
             return array
         }
