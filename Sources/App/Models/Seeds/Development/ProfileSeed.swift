@@ -17,7 +17,7 @@ struct ProfileSeed: Migration {
                               password: nil, currentJob: "iOS Developer",
                               profileDescription: "iOS dev", gitProfile: "test",
                               twitter: "test", linkedin: "test", createdAt: nil)
-        return profile.save(on: conn).map {_ in ()}
+        return profile.save(on: conn).toVoid()
     }
     
     static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {

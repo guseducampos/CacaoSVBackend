@@ -8,9 +8,9 @@
 import Vapor
 import FluentPostgreSQL
 
-struct Profile: PostgreSQLModel {
+struct Profile: PostgreSQLUUIDModel {
     
-    var id: Int?
+    var id: UUID?
     
     var name: String
     
@@ -34,7 +34,7 @@ struct Profile: PostgreSQLModel {
     
     static let createdAtKey: TimestampKey? = \.createdAt
     
-     static let IdKey: IDKey = \.id
+    static let IdKey: IDKey = \.id
     
 }
 

@@ -49,9 +49,9 @@ public func testConfigure(_ config: inout Config,
     migrations.add(model: Meetup.self, database: .psql)
     migrations.add(model: ProfileType.self, database: .psql)
     migrations.add(model: Profile.self, database: .psql)
-    migrations.add(model: Talk.self, database: .psql)
     migrations.add(model: ProfileTypePivot.self, database: .psql)
-    
+    migrations.add(model: Talk.self, database: .psql)
+
     /// Seeds
     
     migrations.add(migration: MeetupStatusSeed.self, database: .psql)

@@ -16,14 +16,6 @@ struct MeetupController: RouteCollection {
     }
     
     func currentSpeakers(_ request: Request) throws -> Future<[Profile]> {
-        return Meetup.query(on: request).filter(\.statusID == Status.scheduled.rawValue).first()
-            .flatMap { meetup -> Future<[Profile]> in
-                guard let meetup = meetup else {
-                    throw Abort(.notFound)
-                }
-                return try meetup.talks.query(on: request).all().flatMap { talks -> Future<[Profile]> in
-                    return talks.map { $0.speaker.get(on: request) }.flatten(on: request)
-                }
-        }
+        return Meetup.speakersForMeetup(withStatus: .scheduled, on: request)
     }
 }

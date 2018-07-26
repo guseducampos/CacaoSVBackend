@@ -13,7 +13,7 @@ struct MeetupSeed: Migration {
     
     static func prepare(on conn: PostgreSQLConnection) -> Future<Void> {
         let meetup = Meetup(id: nil, statusID: 1, name: "test", eventDate: Date(), createdAt: nil)
-        return meetup.save(on: conn).map {_ in ()}
+        return meetup.save(on: conn).toVoid()
     }
     
     static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {

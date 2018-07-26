@@ -17,7 +17,7 @@ struct MeetupStatusSeed: Migration {
         let done = MeetupStatus(id: nil, name: "Done", createdAt: nil)
         let cancelled = MeetupStatus(id: nil, name: "Cancelled", createdAt: nil)
         let inProgress = MeetupStatus(id: nil, name: "In Progress", createdAt: nil)
-        return [scheduled.save(on: conn), done.save(on: conn),cancelled.save(on: conn), inProgress.save(on: conn)].flatten(on: conn).map {_ in ()}
+        return [scheduled.save(on: conn), done.save(on: conn),cancelled.save(on: conn), inProgress.save(on: conn)].flatten(on: conn).toVoid()
     }
     
     static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {

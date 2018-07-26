@@ -6,14 +6,19 @@
 //
 
 import FluentPostgreSQL
+import Vapor
 
 struct ProfileTypePivotSeed: Migration {
 
     typealias Database = PostgreSQLDatabase
     
     static func prepare(on conn: PostgreSQLConnection) -> Future<Void> {
-        let profileTypePivot = ProfileTypePivot(id: nil, profileId: 1, profileTypeId: 1, createdAt: nil)
-        return profileTypePivot.save(on: conn).map {_ in ()}
+        return Profile.query(on: conn).first().flatMap { profiles -> Future<ProfileTypePivot> in
+            guard let profile = profiles else {
+                throw Abort(.notFound)
+            }
+            return try ProfileTypePivot(id: nil, profileId: profile.requireID(), profileTypeId: 1, createdAt: nil).save(on: conn)
+            }.toVoid()
     }
     
     static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {

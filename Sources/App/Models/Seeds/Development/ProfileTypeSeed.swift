@@ -13,7 +13,7 @@ struct ProfileTypeSeed: Migration {
     
     static func prepare(on conn: PostgreSQLConnection) -> Future<Void> {
         let profileType = ProfileType(id: nil, name: "Speaker", createdAt: nil)
-        return profileType.save(on: conn).map {_ in ()}
+        return profileType.save(on: conn).toVoid()
     }
     
     static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
