@@ -8,11 +8,18 @@
 import FluentPostgreSQL
 import Vapor
 
-struct Meetup: PostgreSQLModel {
+enum Status: Int {
+    case scheduled = 1
+    case done
+    case cancelled
+    case inProgress
+}
+
+struct Meetup: PostgreSQLUUIDModel {
     
     static let IdKey: IDKey = \.id
     
-    var id: Int?
+    var id: UUID?
     
     var statusID: MeetupStatus.ID
     
@@ -21,7 +28,7 @@ struct Meetup: PostgreSQLModel {
     var eventDate: Date
     
     var createdAt: Date?
-    
+
     static let createdAtKey: TimestampKey? = \.createdAt
 }
 

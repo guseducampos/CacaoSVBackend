@@ -1,8 +1,20 @@
-import FluentPostgreSQL
+//
+//  TestConfigure.swift
+//  App
+//
+//  Created by  LaptopGCampos on 7/12/18.
+//
+
+@testable import App
 import Vapor
+import FluentPostgreSQL
+
 
 /// Called before your application initializes.
-public func configure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
+public func testConfigure(_ config: inout Config,
+                          _ env: inout Environment,
+                          _ services: inout Services) throws {
+    
     /// Register providers first
     try services.register(FluentPostgreSQLProvider())
     
@@ -13,16 +25,17 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     
     /// Register middleware
     var middlewares = MiddlewareConfig()
-    middlewares.use(ErrorMiddleware.self) 
+    middlewares.use(ErrorMiddleware.self)
     services.register(middlewares)
     
     // Configure a Postgres database
     
-     let postgres = PostgreSQLDatabaseConfig(hostname: Environment.get("POSTGRES_HOST") ?? "",
-        port: Int(Environment.get("POSTGRES_PORT") ?? "") ?? 5432,
-        username: Environment.get("POSTGRES_USER") ?? "",
-        database: Environment.get("POSTGRES_DATABASE") ?? "",
-        password: Environment.get("POSTGRES_PASSWORD") ?? "")
+  
+    let postgres = PostgreSQLDatabaseConfig(hostname: Environment.get("TEST_POSTGRES_HOST") ?? "localhost",
+                                            port: Int(Environment.get("TEST_POSTGRES_PORT") ?? "") ?? 5433,
+                                            username: Environment.get("TEST_POSTGRES_USER") ?? "test",
+                                            database: Environment.get("TEST_POSTGRES_DATABASE") ?? "CacaoSVTest",
+                                            password: Environment.get("TEST_POSTGRES_PASSWORD") ?? "test")
     
     /// Register the configured PostgreSQL database to the database config.
     let database = PostgreSQLDatabase(config: postgres)
@@ -38,18 +51,15 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: Profile.self, database: .psql)
     migrations.add(model: ProfileTypePivot.self, database: .psql)
     migrations.add(model: Talk.self, database: .psql)
-   
+
     /// Seeds
     
     migrations.add(migration: MeetupStatusSeed.self, database: .psql)
-    
-    if env == .development  {
-        migrations.add(migration: MeetupSeed.self, database: .psql)
-        migrations.add(migration: ProfileTypeSeed.self, database: .psql)
-        migrations.add(migration: ProfileSeed.self, database: .psql)
-        migrations.add(migration: ProfileTypePivotSeed.self, database: .psql)
-        migrations.add(migration: TalkSeed.self, database: .psql)
-    }
+    migrations.add(migration: MeetupSeed.self, database: .psql)
+    migrations.add(migration: ProfileTypeSeed.self, database: .psql)
+    migrations.add(migration: ProfileSeed.self, database: .psql)
+    migrations.add(migration: ProfileTypePivotSeed.self, database: .psql)
+    migrations.add(migration: TalkSeed.self, database: .psql)
     
     services.register(migrations)
 }

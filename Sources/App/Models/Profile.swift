@@ -8,19 +8,19 @@
 import Vapor
 import FluentPostgreSQL
 
-struct Profile: PostgreSQLModel {
+struct Profile: PostgreSQLUUIDModel {
     
-    var id: Int?
+    var id: UUID?
     
     var name: String
     
     var lastname: String
     
-    var email: String
+    var email: String?
     
-    var password: String
+    var password: String?
     
-    var jobDescription: String
+    var currentJob: String?
     
     var profileDescription: String
     
@@ -28,11 +28,13 @@ struct Profile: PostgreSQLModel {
     
     var twitter: String?
     
-    var facebook: String?
+    var linkedin: String?
     
     var createdAt: Date?
     
     static let createdAtKey: TimestampKey? = \.createdAt
+    
+    static let IdKey: IDKey = \.id
     
 }
 
@@ -56,6 +58,7 @@ extension Profile: Migration {
             
         }
     }
-    
 }
 extension Profile: Content {}
+
+extension Profile: Parameter {}
