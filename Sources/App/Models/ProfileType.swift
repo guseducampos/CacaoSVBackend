@@ -25,4 +25,9 @@ extension ProfileType {
     }
 }
 
-extension ProfileType: Migration {}
+extension ProfileType: Migration {
+    static func revert(on connection: PostgreSQLConnection) -> Future<Void> {
+        return Database.delete(ProfileType.self, on: connection)
+    }
+    
+}

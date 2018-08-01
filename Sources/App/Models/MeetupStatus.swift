@@ -20,4 +20,8 @@ struct MeetupStatus: PostgreSQLModel, Migration {
     }
     
     static let createdAtKey: TimestampKey? = \.createdAt
+    
+    static func revert(on connection: PostgreSQLConnection) -> Future<Void> {
+         return Database.delete(MeetupStatus.self, on: connection)
+    }
 }

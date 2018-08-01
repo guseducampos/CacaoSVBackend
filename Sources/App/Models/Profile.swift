@@ -58,6 +58,10 @@ extension Profile: Migration {
             
         }
     }
+    
+    static func revert(on connection: PostgreSQLConnection) -> Future<Void> {
+        return Database.delete(Profile.self, on: connection)
+    }
 }
 extension Profile: Content {}
 

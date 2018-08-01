@@ -8,9 +8,9 @@
 import FluentPostgreSQL
 import Vapor
 
-struct Talk: PostgreSQLModel {
+struct Talk: PostgreSQLUUIDModel {
     
-    var id: Int?
+    var id: UUID?
     
     var meetupId: Meetup.ID
     
@@ -45,6 +45,10 @@ extension Talk: Migration {
             builder.reference(from: \.meetupId, to: \Meetup.id)
              builder.reference(from: \.speakerId, to: \Profile.id)
         }
+    }
+    
+    static func revert(on connection: PostgreSQLConnection) -> Future<Void> {
+        return Database.delete(Talk.self, on: connection)
     }
 }
 

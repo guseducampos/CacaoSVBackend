@@ -11,8 +11,9 @@ import Fluent
 extension Meetup {
     
     static func speakersForMeetup(withStatus status: Status, on request: Request) -> Future<[Profile]> {
-        return Meetup.query(on: request).filter(\.statusID == Status.scheduled.rawValue).unwrapFirst(or: Abort(.notFound)).flatMap { meetup -> Future<[Profile]> in
-            return try speakersFor(meetup: meetup, on: request)
+        return meetup(byStatus: status, on: request).flatMap { meetup -> Future<[Profile]> in
+            let speakers =  try speakersFor(meetup: meetup, on: request)
+            return speakers.isEmpty(abort: Abort(.notFound))
         }
     }
     
@@ -20,5 +21,9 @@ extension Meetup {
         return try meetup.talks.query(on: request).all().flatMap { talks -> Future<[Profile]> in
             return talks.map { $0.speaker.get(on: request) }.flatten(on: request)
         }
+    }
+    
+    static func meetup(byStatus status: Status, on request: Request) -> Future<Meetup> {
+        return  Meetup.query(on: request).filter(\.statusID == status.rawValue).unwrapFirst(or: Abort(.notFound))
     }
 }

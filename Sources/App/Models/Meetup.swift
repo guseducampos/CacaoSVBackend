@@ -51,6 +51,9 @@ extension Meetup: Migration {
         }
     }
     
+    static func revert(on connection: PostgreSQLConnection) -> Future<Void> {
+         return Database.delete(Meetup.self, on: connection)
+    }
 }
 
 extension Meetup: Content {}
