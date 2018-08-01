@@ -17,7 +17,7 @@ struct MeetupSeed: Migration {
     }
     
     static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
-        return .done(on: conn)
+        return Meetup.query(on: conn).filter(\.statusID == 1).delete()
     }
     
 }

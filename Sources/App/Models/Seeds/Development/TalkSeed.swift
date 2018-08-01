@@ -19,7 +19,7 @@ struct TalkSeed: Migration {
     }
     
     static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
-        return .done(on: conn)
+        return Talk.query(on: conn).filter(\.topic == "Swift").delete()
     }
     
     private static func getSpeaker(on conn: PostgreSQLConnection) -> Future<Profile> {

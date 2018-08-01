@@ -25,9 +25,9 @@ class BaseTest: XCTestCase {
     }
     
     func reset() throws {
+        try! Application.reset()
         app = try! Application.testable()
         conn = try! app.newConnection(to: .psql).wait()
-        try! Application.reset()
     }
     
 }

@@ -22,6 +22,6 @@ struct ProfileTypePivotSeed: Migration {
     }
     
     static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
-        return .done(on: conn)
+        return ProfileTypePivot.query(on: conn).filter(\.profileTypeId == 1).delete()
     }
 }
