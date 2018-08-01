@@ -30,7 +30,6 @@ extension Application {
         return app
     }
     
-    
     func sendRequest<T: Content>(to path: String, method: HTTPMethod, headers: HTTPHeaders = HTTPHeaders(), body: T? = nil) throws -> Response {
         let responder = try self.make(Responder.self)
         let request = HTTPRequest(method: method, url: URL(string: path)!, headers: headers)
