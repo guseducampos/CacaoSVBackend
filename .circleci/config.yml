@@ -1,5 +1,4 @@
 version: 2
-
 jobs:
   linux:
     docker:
@@ -16,7 +15,7 @@ jobs:
           POSTGRES_DB: postgres
           POSTGRES_PASSWORD: ""
     steps:
-    - run:
+      - run:
           name: Checking files 
           command: ls
       - run:
