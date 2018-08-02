@@ -7,6 +7,12 @@
 
 import FluentPostgreSQL
 
+enum ProfileTypes: Int {
+    case speaker = 1
+    case admin
+    case communityMember
+}
+
 struct ProfileType: PostgreSQLModel {
     
     var id: Int?
@@ -25,9 +31,4 @@ extension ProfileType {
     }
 }
 
-extension ProfileType: Migration {
-    static func revert(on connection: PostgreSQLConnection) -> Future<Void> {
-        return Database.delete(ProfileType.self, on: connection)
-    }
-    
-}
+extension ProfileType: Migration {}

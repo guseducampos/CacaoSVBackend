@@ -39,8 +39,4 @@ extension ProfileTypePivot: Migration {
             builder.reference(from: \.profileTypeId, to:\ProfileType.id)
         }
     }
-    
-    static func revert(on connection: PostgreSQLConnection) -> Future<Void> {
-         return Database.delete(ProfileTypePivot.self, on: connection)
-    }
 }

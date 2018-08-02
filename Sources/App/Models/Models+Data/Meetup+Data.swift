@@ -13,7 +13,7 @@ extension Meetup {
     static func speakersForMeetup(withStatus status: Status, on request: Request) -> Future<[Profile]> {
         return meetup(byStatus: status, on: request).flatMap { meetup -> Future<[Profile]> in
             let speakers =  try speakersFor(meetup: meetup, on: request)
-            return speakers.isEmpty(abort: Abort(.notFound))
+            return speakers.isEmpty(abort: Abort(.notFound, reason: "There are no speakers"))
         }
     }
     
@@ -24,6 +24,6 @@ extension Meetup {
     }
     
     static func meetup(byStatus status: Status, on request: Request) -> Future<Meetup> {
-        return  Meetup.query(on: request).filter(\.statusID == status.rawValue).unwrapFirst(or: Abort(.notFound))
+        return Meetup.query(on: request).filter(\.statusID == status.rawValue).unwrapFirst(or: Abort(.notFound, reason: "there is no meetup with the status \(status)"))
     }
 }

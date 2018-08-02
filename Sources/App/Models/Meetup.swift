@@ -8,11 +8,24 @@
 import FluentPostgreSQL
 import Vapor
 
-enum Status: Int {
+enum Status: Int, CustomStringConvertible {
     case scheduled = 1
     case done
     case cancelled
     case inProgress
+    
+    var description: String {
+        switch self {
+        case .scheduled:
+            return "Scheduled"
+        case .done:
+            return "Done"
+        case .cancelled:
+            return "Cancelled"
+        case .inProgress:
+            return "In Progress"
+        }
+    }
 }
 
 struct Meetup: PostgreSQLUUIDModel {
@@ -44,15 +57,12 @@ extension Meetup {
 }
 
 extension Meetup: Migration {
+    
     static func prepare(on connection: PostgreSQLConnection) -> Future<Void> {
         return Database.create(self, on: connection) { builder in
             try addProperties(to: builder)
              builder.reference(from: \Meetup.statusID, to: \MeetupStatus.id)
         }
-    }
-    
-    static func revert(on connection: PostgreSQLConnection) -> Future<Void> {
-         return Database.delete(Meetup.self, on: connection)
     }
 }
 

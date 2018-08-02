@@ -34,8 +34,6 @@ struct Profile: PostgreSQLUUIDModel {
     
     static let createdAtKey: TimestampKey? = \.createdAt
     
-    static let IdKey: IDKey = \.id
-    
 }
 
 extension Profile {
@@ -57,10 +55,6 @@ extension Profile: Migration {
              builder.unique(on: \.email)
             
         }
-    }
-    
-    static func revert(on connection: PostgreSQLConnection) -> Future<Void> {
-        return Database.delete(Profile.self, on: connection)
     }
 }
 extension Profile: Content {}

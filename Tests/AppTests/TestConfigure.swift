@@ -53,13 +53,14 @@ public func testConfigure(_ config: inout Config,
     migrations.add(model: Talk.self, database: .psql)
     migrations.add(migration: MeetupStatusSeed.self, database: .psql)
     migrations.add(migration: ProfileTypeSeed.self, database: .psql)
-//    /// Seeds
-//    migrations.add(migration: MeetupStatusSeed.self, database: .psql)
-//    migrations.add(migration: MeetupSeed.self, database: .psql)
-//    migrations.add(migration: ProfileTypeSeed.self, database: .psql)
-//    migrations.add(migration: ProfileSeed.self, database: .psql)
-//    migrations.add(migration: ProfileTypePivotSeed.self, database: .psql)
-//    migrations.add(migration: TalkSeed.self, database: .psql)
+    
+    /// Seeds
+    migrations.add(migration: MeetupStatusSeed.self, database: .psql)
+    migrations.add(migration: MeetupSeed.self, database: .psql)
+    migrations.add(migration: ProfileTypeSeed.self, database: .psql)
+    migrations.add(migration: ProfileSeed.self, database: .psql)
+    migrations.add(migration: ProfileTypePivotSeed.self, database: .psql)
+    migrations.add(migration: TalkSeed.self, database: .psql)
     
     var commandConfig = CommandConfig.default()
     commandConfig.useFluentCommands()
