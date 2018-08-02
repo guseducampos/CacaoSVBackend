@@ -34,8 +34,6 @@ struct Profile: PostgreSQLUUIDModel {
     
     static let createdAtKey: TimestampKey? = \.createdAt
     
-    static let IdKey: IDKey = \.id
-    
 }
 
 extension Profile {

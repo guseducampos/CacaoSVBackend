@@ -17,6 +17,6 @@ struct ProfileTypeSeed: Migration {
     }
     
     static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
-        return ProfileType.query(on: conn).filter(\.name == "Speaker").delete()
+        return .done(on: conn) 
     }
 }

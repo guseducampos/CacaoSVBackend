@@ -7,6 +7,12 @@
 
 import FluentPostgreSQL
 
+enum ProfileTypes: Int {
+    case speaker = 1
+    case admin
+    case communityMember
+}
+
 struct ProfileType: PostgreSQLModel {
     
     var id: Int?

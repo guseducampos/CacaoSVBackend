@@ -14,18 +14,16 @@ struct TalkSeed: Migration {
     
     static func prepare(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
         return flatMap(to: Talk.self, getSpeaker(on: conn), getMeetup(on: conn)) { (profile, meetup) -> Future<Talk> in
-            return Talk(id: nil, meetupId: try meetup.requireID(), speakerId: try profile.requireID(), topic: "Swift", description: "Programming Language", createdAt: nil).save(on: conn)
+            return Talk(id: nil, meetupId: try meetup.requireID(), speakerId: profile.profileId, topic: "Swift", description: "Programming Language", createdAt: nil).save(on: conn)
             }.toVoid()
     }
     
     static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
-        return Talk.query(on: conn).filter(\.topic == "Swift").delete()
+        return .done(on: conn)
     }
     
-    private static func getSpeaker(on conn: PostgreSQLConnection) -> Future<Profile> {
-        return ProfileType.query(on: conn).filter(\.id == 1).unwrapFirst(or: Abort(.notFound)).flatMap { profileType in
-            return try  profileType.profiles.query(on: conn).unwrapFirst(or: Abort(.notFound))
-        }
+    private static func getSpeaker(on conn: PostgreSQLConnection) -> Future<ProfileTypePivot> {
+        return ProfileTypePivot.query(on: conn).filter(\.profileTypeId == ProfileTypes.speaker.rawValue).unwrapFirst(or: Abort(.notFound))
     }
     
     private static func getMeetup(on conn: PostgreSQLConnection) -> Future<Meetup> {

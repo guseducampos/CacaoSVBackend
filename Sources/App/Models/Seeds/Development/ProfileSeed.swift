@@ -21,6 +21,6 @@ struct ProfileSeed: Migration {
     }
     
     static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
-        return Profile.query(on: conn).filter(\.name == "Gustavo").delete()
+        return .done(on: conn)
     }
 }
