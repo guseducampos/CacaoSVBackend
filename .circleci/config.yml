@@ -1,14 +1,24 @@
 version: 2
+
 jobs:
   linux:
     docker:
       - image: swift:4.1
-      - image: circleci/postgres:latest
+        environment:
+        TEST_POSTGRES_PASSWORD: ""
+        TEST_POSTGRES_USER: postgres
+        TEST_POSTGRES_HOST: postgres
+        TEST_POSTGRES_PORT: 5432
+        TEST_POSTGRES_DATABASE: CacaoSVTest
+      - image: postgres:latest
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: postgres
           POSTGRES_PASSWORD: ""
     steps:
+    - run:
+          name: Checking files 
+          command: ls
       - run:
           name: Building 
           command: swift build
@@ -18,6 +28,7 @@ jobs:
 
 workflows:
   version: 2
-  build-linux:
+  tests:
     jobs:
       - linux
+
