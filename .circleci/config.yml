@@ -15,6 +15,7 @@ jobs:
           POSTGRES_DB: postgres
           POSTGRES_PASSWORD: ""
     steps:
+      - checkout
       - run:
           name: Checking files 
           command: ls
