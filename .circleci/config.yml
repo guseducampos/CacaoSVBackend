@@ -2,7 +2,7 @@ version: 2
 jobs:
   linux:
     docker:
-      - image: codevapor/swift:4.1
+      - image: swift:4.1
       - image: circleci/postgres:latest
         environment:
           POSTGRES_USER: CacaoSV
