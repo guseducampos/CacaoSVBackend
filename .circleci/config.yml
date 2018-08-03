@@ -6,7 +6,7 @@ jobs:
         environment:
         TEST_POSTGRES_PASSWORD: ""
         TEST_POSTGRES_USER: postgres
-        TEST_POSTGRES_HOST: localhost
+        TEST_POSTGRES_HOST: 127.0.0.1
         TEST_POSTGRES_PORT: 5432
         TEST_POSTGRES_DATABASE: CacaoSVTest
       - image: postgres:latest
