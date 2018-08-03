@@ -4,7 +4,6 @@ jobs:
     docker:
       - image: swift:4.1
         environment:
-          TEST_POSTGRES_PASSWORD: "test"
           TEST_POSTGRES_USER: postgres
           TEST_POSTGRES_HOST: 127.0.0.1
           TEST_POSTGRES_PORT: 5432
@@ -13,7 +12,6 @@ jobs:
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: CacaoSVTest
-          POSTGRES_PASSWORD: "test"
     steps:
       - checkout
       - run:
