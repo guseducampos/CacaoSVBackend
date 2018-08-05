@@ -32,7 +32,7 @@ public func testConfigure(_ config: inout Config,
     
   
     let postgres = PostgreSQLDatabaseConfig(hostname: Environment.get("TEST_POSTGRES_HOST") ?? "localhost",
-                                            port: Int(Environment.get("TEST_POSTGRES_PORT") ?? "") ?? 5433,
+                                            port: Int(Environment.get("TEST_POSTGRES_PORT") ?? "") ?? 5432,
                                             username: Environment.get("TEST_POSTGRES_USER") ?? "test",
                                             database: Environment.get("TEST_POSTGRES_DATABASE") ?? "CacaoSVTest",
                                             password: Environment.get("TEST_POSTGRES_PASSWORD") ?? "test")
