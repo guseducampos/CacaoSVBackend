@@ -20,7 +20,7 @@ jobs:
           name: Testing
           command: swift test
       - run:
-          name: Testing
+          name: release
           command: swift build -c release   
 
 workflows:
