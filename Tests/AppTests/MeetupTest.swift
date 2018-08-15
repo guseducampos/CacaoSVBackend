@@ -46,10 +46,29 @@ final class MeetupTest: BaseTest {
         try reset()
     }
     
+    func testCurrentTalks() throws {
+        let talk = try app.getRequest(to: "/api/meetup/currentTalks", method: .GET, decodeTo: [Talk].self)
+        XCTAssertEqual(talk.count, 1)
+        XCTAssertNotNil(talk.first)
+    }
+    
+    func testEmptyCurrentMeetupTalks() throws {
+        _ =  try Meetup.query(on: conn).filter(\.statusID ==  Status.scheduled.rawValue).unwrapFirst(or: Abort(.notFound)).flatMap { meetup -> Future<[Talk]> in
+            return try meetup.talks.query(on: self.conn).all()
+            }.flatMap { talks -> Future<Void> in
+                return talks.map { $0.delete(on: self.conn)}.flatten(on: self.conn)
+            }.wait()
+        let response = try app.sendRequest(to: "/api/meetup/currentTalks", method: .GET)
+        XCTAssertEqual(response.http.status.code, 404)
+        try reset()
+    }
+    
     static let allTests = [
         ("testCurrentMeetupSpeakers", testCurrentMeetupSpeakers),
         ("testEmptyCurrentMeetupSpeakers", testEmptyCurrentMeetupSpeakers),
         ("testCurrentMeetup", testCurrentMeetup),
-        ("testEmptyMeetup", testEmptyMeetup)
+        ("testEmptyMeetup", testEmptyMeetup),
+        ("testCurrentTalks", testCurrentTalks),
+        ("testEmptyCurrentMeetupTalks", testEmptyCurrentMeetupTalks)
     ]
 }

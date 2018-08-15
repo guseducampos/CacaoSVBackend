@@ -26,4 +26,10 @@ extension Meetup {
     static func meetup(byStatus status: Status, on request: Request) -> Future<Meetup> {
         return Meetup.query(on: request).filter(\.statusID == status.rawValue).unwrapFirst(or: Abort(.notFound, reason: "there is no meetup with the status \(status)"))
     }
+    
+    static func talksOfMeetup(withStatus status: Status, on request: Request) -> Future<[Talk]> {
+        return meetup(byStatus: status, on: request).flatMap { meetup in
+            return try meetup.talks.query(on: request).all().checkEmpty(or: Abort(.notFound))
+        }
+    }
 }
