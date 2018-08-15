@@ -13,15 +13,13 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_DB: CacaoSVTest
     steps:
+      - checkout
       - run:
           name: Building 
           command: swift build
       - run:
           name: Testing
           command: swift test
-      - run:
-          name: release
-          command: swift build -c release   
 
 workflows:
   version: 2
