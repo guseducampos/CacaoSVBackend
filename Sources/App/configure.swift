@@ -38,17 +38,18 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: Profile.self, database: .psql)
     migrations.add(model: ProfileTypePivot.self, database: .psql)
     migrations.add(model: Talk.self, database: .psql)
-   
-    /// Seeds
     
+    /// Seeds
     migrations.add(migration: MeetupStatusSeed.self, database: .psql)
+    migrations.add(migration: ProfileTypeSeed.self, database: .psql)
+    migrations.add(migration: ProfileMoreTypesSeed.self, database: .psql)
     
     if env == .development  {
         migrations.add(migration: MeetupSeed.self, database: .psql)
-        migrations.add(migration: ProfileTypeSeed.self, database: .psql)
         migrations.add(migration: ProfileSeed.self, database: .psql)
         migrations.add(migration: ProfileTypePivotSeed.self, database: .psql)
         migrations.add(migration: TalkSeed.self, database: .psql)
+        migrations.add(migration: ProfileCommunitySeed.self, database: .psql)
     }
     
     services.register(migrations)

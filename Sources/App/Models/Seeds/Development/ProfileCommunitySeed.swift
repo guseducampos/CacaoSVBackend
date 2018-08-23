@@ -1,20 +1,20 @@
 //
-//  Profile_ProfileTypeSeed.swift
+//  ProfileCommunitySeed.swift
 //  App
 //
-//  Created by  LaptopGCampos on 7/11/18.
+//  Created by  LaptopGCampos on 8/23/18.
 //
 
 import FluentPostgreSQL
 import Vapor
 
-struct ProfileTypePivotSeed: Migration {
-
+struct ProfileCommunitySeed: Migration {
+    
     typealias Database = PostgreSQLDatabase
     
     static func prepare(on conn: PostgreSQLConnection) -> Future<Void> {
         return Profile.query(on: conn).unwrapFirst(or: Abort(.notFound, reason: "there is no profiles")).flatMap { profile -> Future<ProfileTypePivot> in
-            return try ProfileTypePivot(id: nil, profileId: profile.requireID(), profileTypeId: ProfileTypes.speaker.rawValue, createdAt: nil).save(on: conn)
+            return try ProfileTypePivot(id: nil, profileId: profile.requireID(), profileTypeId: ProfileTypes.community.rawValue, createdAt: nil).save(on: conn)
             }.toVoid()
     }
     

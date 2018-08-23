@@ -11,7 +11,7 @@ import Fluent
 struct MeetupController: RouteCollection {
     
     func boot(router: Router) throws {
-        let publicRoutes = router.grouped("api", "meetup")
+        let publicRoutes = router.grouped("meetup")
         publicRoutes.get("currentSpeakers", use: currentSpeakers)
         publicRoutes.get("currentMeetup", use: currentMeetup)
         publicRoutes.get("currentTalks", use: currentTalks)
